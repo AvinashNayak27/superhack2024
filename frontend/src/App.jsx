@@ -98,7 +98,7 @@ const VotingAppIntro = () => {
             outline: "none",
           }}
           onClick={() => {
-            alert("App in progress ...");
+            window.location.href = "/onboard";
           }}
         >
           Vote Now
