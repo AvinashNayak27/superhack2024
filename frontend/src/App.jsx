@@ -5,6 +5,7 @@ import { createWallet } from "thirdweb/wallets";
 import { client } from "./main";
 import { baseSepolia } from "thirdweb/chains";
 import { useActiveAccount } from "thirdweb/react";
+import { ConnectButton } from "thirdweb/react";
 
 const VotingAppIntro = () => {
   const { connect } = useConnect();
@@ -13,6 +14,13 @@ const VotingAppIntro = () => {
   return (
     <div className="flex flex-col items-center min-h-screen bg-white mt-32">
       <div className="text-center">
+        <div
+          style={{
+            display: "none",
+          }}
+        >
+          <ConnectButton client={client} />
+        </div>
         <div className="flex flex-row gap-2 mb-4 justify-center">
           <span className="inline-flex items-center">
             <img
