@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "react": "^18.3.1",
+    "react-blockies": "^1.4.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.0",
     "thirdweb": "^5.44.1"

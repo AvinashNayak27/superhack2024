@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import { useConnect } from "thirdweb/react";
 import { createWallet } from "thirdweb/wallets";
@@ -10,6 +10,13 @@ import { ConnectButton } from "thirdweb/react";
 const VotingAppIntro = () => {
   const { connect } = useConnect();
   const account = useActiveAccount();
+
+  useEffect(() => {
+    if (account) {
+      window.location.href = "/onboard";
+    }
+  }
+  , [account]);
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-white mt-32">
@@ -46,64 +53,41 @@ const VotingAppIntro = () => {
           className="w-64 h-auto"
         />
       </div>
-      {!account ? (
-        <button
-          style={{
-            cursor: "pointer",
-            width: "335px",
-            height: "56px",
-            padding: "0px 8px",
-            border: "0",
-            boxSizing: "border-box",
-            borderRadius: "12px",
-            backgroundColor: "#030303",
-            color: "#ffffff",
-            fontSize: "18px",
-            fontWeight: "700",
-            lineHeight: "23px",
-            outline: "none",
-          }}
-          onClick={() => {
-            connect(async () => {
-              const coinbase = createWallet("com.coinbase.wallet", {
-                walletConfig: {
-                  options: "all",
-                },
-              });
-              await coinbase.connect({
-                client,
-                chain: baseSepolia,
-              });
-              return coinbase;
+      <button
+        style={{
+          cursor: "pointer",
+          width: "335px",
+          height: "56px",
+          padding: "0px 8px",
+          border: "0",
+          boxSizing: "border-box",
+          borderRadius: "12px",
+          backgroundColor: "#030303",
+          color: "#ffffff",
+          fontSize: "18px",
+          fontWeight: "700",
+          lineHeight: "23px",
+          outline: "none",
+        }}
+        onClick={() => {
+          connect(async () => {
+            const coinbase = createWallet("com.coinbase.wallet", {
+              walletConfig: {
+                options: "all",
+              },
             });
-          }}
-        >
-          Create or Connect Wallet
-        </button>
-      ) : (
-        <button
-          style={{
-            cursor: "pointer",
-            width: "335px",
-            height: "56px",
-            padding: "0px 8px",
-            border: "0",
-            boxSizing: "border-box",
-            borderRadius: "12px",
-            backgroundColor: "#030303",
-            color: "#ffffff",
-            fontSize: "18px",
-            fontWeight: "700",
-            lineHeight: "23px",
-            outline: "none",
-          }}
-          onClick={() => {
+            await coinbase.connect({
+              client,
+              chain: baseSepolia,
+            });
+            return coinbase;
+          }).then(() => {
             window.location.href = "/onboard";
-          }}
-        >
-          Vote Now
-        </button>
-      )}
+          });
+        }}
+      >
+        Create or Connect Wallet
+      </button>
     </div>
   );
 };
