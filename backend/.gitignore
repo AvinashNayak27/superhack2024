@@ -1,3 +1,7 @@
+.dockerignore
+Dockerfile
+fly.toml
+
 # Logs
 logs
 *.log
@@ -23,4 +27,4 @@ yarn.lock
 *.njsproj
 *.sln
 *.sw?
-.vercel
+
