@@ -1,5 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { readContract ,getContract} from "thirdweb";
+import { client } from "../main";
+import { defineChain } from "thirdweb";
 
 const AuthContext = createContext();
 
@@ -12,6 +15,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [isloading, setIsLoading] = useState(true);
   const [sub, setSub] = useState(null);
+  const [zipCode, setZipCode] = useState(null);
 
   useEffect(() => {
     const validateToken = async () => {
@@ -51,11 +55,37 @@ export const AuthProvider = ({ children }) => {
     validateToken();
   }, [token]);
 
+
+// connect to your contract
+const contract = getContract({ 
+  client, 
+  chain: defineChain(84532), 
+  address: "0x68E6773488b1ca6791DAC2C353f88bEf2B0B8841"
+});
+
+  const checkAuthenticationViaContract = async (_userAddress) => {
+    const data = await readContract({ 
+      contract, 
+      method: "function getUser(address _userAddress) view returns ((address userAddress, string sub, string postalCode))", 
+      params: [_userAddress] 
+    })
+
+    if (data) {
+      setSub(data.sub);
+      setZipCode(data.postalCode);
+      setIsAuthenticated(true);
+    }
+  }
+
   const login = (newToken) => {
     setIsAuthenticated(true);
     setToken(newToken);
     localStorage.setItem("token", newToken);
     window.location.href = "/onboard";
+  };
+
+  const setZip = (zip) => {
+    setZipCode(zip);
   };
 
   const logout = () => {
@@ -71,6 +101,9 @@ export const AuthProvider = ({ children }) => {
     logout,
     isLoading: isloading,
     sub,
+    zipCode,
+    setZip,
+    checkAuthenticationViaContract,
   };
 
   return (

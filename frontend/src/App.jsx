@@ -7,26 +7,6 @@ import { useActiveAccount } from "thirdweb/react";
 import { ConnectButton } from "thirdweb/react";
 import { defineChain } from "thirdweb/chains";
 
-const baseSepoliaTenderlyVirtual = defineChain({
-  id: 84532,
-  name: "Virtual Base Sepolia",
-  nativeCurrency: { name: "VETH", symbol: "VETH", decimals: 18 },
-  rpcUrls: {
-    default: {
-      http: [
-        "https://virtual.base-sepolia.rpc.tenderly.co/50da8cc2-df43-4884-bd7f-5a3acfc271d4",
-      ],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: "Tenderly Explorer",
-      url: "https://virtual.base-sepolia.rpc.tenderly.co/487b06f6-0695-455c-b406-dc9d4b145602",
-    },
-  },
-  testnet: true,
-});
-
 const VotingAppIntro = () => {
   const { connect } = useConnect();
   const account = useActiveAccount();
@@ -97,7 +77,7 @@ const VotingAppIntro = () => {
             });
             await coinbase.connect({
               client,
-              chain: baseSepoliaTenderlyVirtual,
+              chain: defineChain(84532),
             });
             return coinbase;
           }).then(() => {

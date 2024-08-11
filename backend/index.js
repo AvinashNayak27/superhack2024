@@ -3,9 +3,32 @@ const { Issuer, generators } = require("openid-client");
 const jose = require("jose");
 const cors = require("cors");
 const session = require("express-session");
+const {
+  createThirdwebClient,
+  getContract,
+  prepareContractCall,
+  sendAndConfirmTransaction,
+} = require("thirdweb");
+const { defineChain } = require("thirdweb/chains");
+const { privateKeyToAccount } = require("thirdweb/wallets");
+require("dotenv").config();
+
+const thirdwebClient = createThirdwebClient({
+  secretKey: process.env.THIRDWEB_API_KEY,
+});
+
+const wallet = privateKeyToAccount({
+  client: thirdwebClient,
+  privateKey: process.env.PRIVATE_KEY,
+});
+// connect to your contract
+const contract = getContract({
+  client: thirdwebClient,
+  chain: defineChain(84532),
+  address: "0x68E6773488b1ca6791DAC2C353f88bEf2B0B8841",
+});
 
 let client;
-
 // Initialize the OIDC client
 Issuer.discover("https://id.worldcoin.org")
   .then((worldcoinIssuer) => {
@@ -74,6 +97,7 @@ app.get("/login", (req, res) => {
 
   res.redirect(authUrl);
 });
+
 app.get("/redirect", async (req, res) => {
   const { code, state } = req.query;
 
@@ -111,6 +135,32 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+app.post("/addUser", ensureAuthenticated, async (req, res) => {
+  const { walletAddress, sub, zipCode } = req.body;
+  console.log("walletAddress", walletAddress);
+  console.log("sub", sub);
+  console.log("zipCode", zipCode);
+
+  const userAddress = walletAddress;
+  const _sub = sub;
+  const _postalCode = zipCode;
+
+  const transaction = await prepareContractCall({
+    contract,
+    method:
+      "function createUser(address userAddress, string _sub, string _postalCode)",
+    params: [userAddress, _sub, _postalCode],
+  });
+  const { transactionHash } = await sendAndConfirmTransaction({
+    transaction,
+    account: wallet,
+  });
+
+  console.log("Transaction hash:", transactionHash);
+
+  res.json({ success: true });
+});
+
 const verifyJwt = async (token) => {
   const JWKS = jose.createRemoteJWKSet(
     new URL("https://id.worldcoin.org/jwks.json")
@@ -124,4 +174,7 @@ const verifyJwt = async (token) => {
   return payload;
 };
 
-app.listen(3000, () => console.log("App listening on port 3000"));
+app.listen(3000, () => {
+  console.log("App listening on port 3000");
+  console.log(wallet?.address);
+});
