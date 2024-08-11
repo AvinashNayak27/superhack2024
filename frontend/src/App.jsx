@@ -3,9 +3,29 @@ import "./App.css";
 import { useConnect } from "thirdweb/react";
 import { createWallet } from "thirdweb/wallets";
 import { client } from "./main";
-import { baseSepolia } from "thirdweb/chains";
 import { useActiveAccount } from "thirdweb/react";
 import { ConnectButton } from "thirdweb/react";
+import { defineChain } from "thirdweb/chains";
+
+const baseSepoliaTenderlyVirtual = defineChain({
+  id: 84532,
+  name: "Virtual Base Sepolia",
+  nativeCurrency: { name: "VETH", symbol: "VETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: [
+        "https://virtual.base-sepolia.rpc.tenderly.co/50da8cc2-df43-4884-bd7f-5a3acfc271d4",
+      ],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Tenderly Explorer",
+      url: "https://virtual.base-sepolia.rpc.tenderly.co/487b06f6-0695-455c-b406-dc9d4b145602",
+    },
+  },
+  testnet: true,
+});
 
 const VotingAppIntro = () => {
   const { connect } = useConnect();
@@ -15,8 +35,7 @@ const VotingAppIntro = () => {
     if (account) {
       window.location.href = "/onboard";
     }
-  }
-  , [account]);
+  }, [account]);
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-white mt-32">
@@ -78,7 +97,7 @@ const VotingAppIntro = () => {
             });
             await coinbase.connect({
               client,
-              chain: baseSepolia,
+              chain: baseSepoliaTenderlyVirtual,
             });
             return coinbase;
           }).then(() => {

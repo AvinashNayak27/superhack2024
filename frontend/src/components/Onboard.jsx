@@ -1,12 +1,32 @@
 import React, { useEffect } from "react";
 import { client } from "../main";
-import { baseSepolia } from "thirdweb/chains";
+import { defineChain } from "thirdweb/chains";
 import { useActiveAccount, useWalletDetailsModal } from "thirdweb/react";
 import { ConnectButton } from "thirdweb/react";
 import Blockies from "react-blockies";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/authContext";
 import { useState } from "react";
+
+const baseSepoliaTenderlyVirtual = defineChain({
+  id: 84532,
+  name: "Virtual Base Sepolia",
+  nativeCurrency: { name: "VETH", symbol: "VETH", decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: [
+        "https://virtual.base-sepolia.rpc.tenderly.co/50da8cc2-df43-4884-bd7f-5a3acfc271d4",
+      ],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Tenderly Explorer",
+      url: "https://virtual.base-sepolia.rpc.tenderly.co/487b06f6-0695-455c-b406-dc9d4b145602",
+    },
+  },
+  testnet: true,
+});
 
 function Onboard() {
   const account = useActiveAccount();
@@ -15,7 +35,7 @@ function Onboard() {
   function handleClick() {
     open({
       client: client,
-      chain: baseSepolia,
+      chain: baseSepoliaTenderlyVirtual,
       account: account,
       theme: "light",
     });
