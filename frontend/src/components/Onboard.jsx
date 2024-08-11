@@ -19,6 +19,8 @@ function Onboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentUrl, setCurrentUrl] = useState("");
 
+
+
   function handleClick() {
     open({
       client: client,
@@ -211,7 +213,7 @@ function Onboard() {
         {isAuthenticated && (
           <>
             <button className="mt-4 w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 focus:outline-none focus:bg-green-600">
-              Verified with WorldID ✅
+              Verified with WorldID  ✅
             </button>
           </>
         )}
@@ -244,6 +246,12 @@ function Onboard() {
           </>
         )}
       </div>
+
+      <button 
+      onClick={() => window.location.href = "/elections"}
+      className="mt-4  bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:bg-blue-700">
+        Start Voting
+      </button>
 
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
