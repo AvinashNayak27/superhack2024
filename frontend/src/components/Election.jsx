@@ -17,7 +17,7 @@ function Election() {
   const contract = getContract({
     client,
     chain: defineChain(84532),
-    address: "0x9A3d4E9FD22e75869e5425Fe9A9569af49F189dE",
+    address: "0x24a1bB65c8584344ea0da84a94DA36E99CD0C4e7",
   });
 
   const { isAuthenticated, checkAuthenticationViaContract, logout } = useAuth();

@@ -25,7 +25,7 @@ const wallet = privateKeyToAccount({
 const contract = getContract({
   client: thirdwebClient,
   chain: defineChain(84532),
-  address: "0x68E6773488b1ca6791DAC2C353f88bEf2B0B8841",
+  address: "0x1F01b6D82acA3959efa8612F08BD837c4323F64d",
 });
 
 let client;
