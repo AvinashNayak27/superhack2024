@@ -35,5 +35,8 @@
     "tailwindcss": "^3.4.9",
     "vite": "^5.4.0",
     "vite-plugin-externals": "^0.6.2"
+  },
+  "overrides": {
+    "cross-spawn": ">=7.0.5"
   }
 }
